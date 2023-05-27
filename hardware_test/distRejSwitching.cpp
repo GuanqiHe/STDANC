@@ -37,15 +37,17 @@ struct datapack_t
 	array_t y;
 	array_t d;
 	array_t u;
-	array_t u_a;
-	array_t y_d;
-	array_t eta1;
-	array_t eta2;
-	array_t xi1;
-	array_t xi2;
-	array_t zeta1;
-	array_t zeta2;
-	MSGPACK_DEFINE_MAP(t, y, d, u, u_a, y_d, eta1, eta2, xi1, xi2, zeta1, zeta2);
+	// array_t u_a;
+	// array_t y_d;
+	// array_t eta1;
+	// array_t eta2;
+	// array_t xi1;
+	// array_t xi2;
+	// array_t zeta1;
+	// array_t zeta2;
+	// MSGPACK_DEFINE_MAP(t, y, d, u, u_a, y_d, eta1, eta2, xi1, xi2, zeta1, zeta2);
+	MSGPACK_DEFINE_MAP(t, y, d, u);
+
 };
 
 int32 CVICALLBACK DoneCallback(TaskHandle taskHandle, int32 status, void *callbackData);
@@ -79,7 +81,7 @@ public:
 		S << 0, w_star_,
 			-w_star_, 0;
 
-		theta_hat << 1.0, 1.0;
+		theta_hat << -1.0, 1.0;
 
 		alpha = 3.0;
 		epsilon = 3.0;
@@ -233,14 +235,14 @@ int main(void)
 	data.t.reserve(totalNumSamples);
 	data.u.reserve(totalNumSamples);
 	data.y.reserve(totalNumSamples);
-	data.u_a.reserve(totalNumSamples);
-	data.y_d.reserve(totalNumSamples);
-	data.eta1.reserve(totalNumSamples);
-	data.eta2.reserve(totalNumSamples);
-	data.xi1.reserve(totalNumSamples);
-	data.xi2.reserve(totalNumSamples);
-	data.zeta1.reserve(totalNumSamples);
-	data.zeta2.reserve(totalNumSamples);
+	// data.u_a.reserve(totalNumSamples);
+	// data.y_d.reserve(totalNumSamples);
+	// data.eta1.reserve(totalNumSamples);
+	// data.eta2.reserve(totalNumSamples);
+	// data.xi1.reserve(totalNumSamples);
+	// data.xi2.reserve(totalNumSamples);
+	// data.zeta1.reserve(totalNumSamples);
+	// data.zeta2.reserve(totalNumSamples);
 
 
 	int64 index = 0;
@@ -285,14 +287,14 @@ int main(void)
 			data.d.push_back(d);
 			data.u.push_back(u);
 			data.y.push_back(y);
-			data.u_a.push_back(controller.u_a);
-			data.y_d.push_back(controller.y_d);
-			data.eta1.push_back(controller.eta_(0));
-			data.eta2.push_back(controller.eta_(1));
-			data.xi1.push_back(controller.xi_(0));
-			data.xi2.push_back(controller.xi_(1));
-			data.zeta1.push_back(controller.zeta_(0));
-			data.zeta2.push_back(controller.zeta_(1));
+			// data.u_a.push_back(controller.u_a);
+			// data.y_d.push_back(controller.y_d);
+			// data.eta1.push_back(controller.eta_(0));
+			// data.eta2.push_back(controller.eta_(1));
+			// data.xi1.push_back(controller.xi_(0));
+			// data.xi2.push_back(controller.xi_(1));
+			// data.zeta1.push_back(controller.zeta_(0));
+			// data.zeta2.push_back(controller.zeta_(1));
 
 
 			writeChan0[i] = d;
@@ -322,14 +324,14 @@ int main(void)
 			data.d.push_back(d);
 			data.u.push_back(u);
 			data.y.push_back(y);
-			data.u_a.push_back(controller.u_a);
-			data.y_d.push_back(controller.y_d);
-			data.eta1.push_back(controller.eta_(0));
-			data.eta2.push_back(controller.eta_(1));
-			data.xi1.push_back(controller.xi_(0));
-			data.xi2.push_back(controller.xi_(1));
-			data.zeta1.push_back(controller.zeta_(0));
-			data.zeta2.push_back(controller.zeta_(1));
+			// data.u_a.push_back(controller.u_a);
+			// data.y_d.push_back(controller.y_d);
+			// data.eta1.push_back(controller.eta_(0));
+			// data.eta2.push_back(controller.eta_(1));
+			// data.xi1.push_back(controller.xi_(0));
+			// data.xi2.push_back(controller.xi_(1));
+			// data.zeta1.push_back(controller.zeta_(0));
+			// data.zeta2.push_back(controller.zeta_(1));
 
 			writeChan0[i] = d;
 			writeChan1[i] = u;

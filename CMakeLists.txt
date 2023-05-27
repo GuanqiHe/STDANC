@@ -21,13 +21,28 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
 
+
+
+
+
 # project specific information
 cmake_minimum_required(VERSION 3.19)
-project(ContGen-ExtClk)
-set(EXECUTABLE_OUTPUT_PATH bin)
+project(ActiveNoiseCancellation)
+
+
+
+
+
+set(EXECUTABLE_OUTPUT_PATH ../run)
 set(CMAKE_BUILD_TYPE Release)
-set(HEADER_DIRS ../include)
+set(HEADER_DIRS include lib/Eigen lib lib/boost src lib/yaml-cpp src/xjk)
+set(LIB_DIRS include lib)
+set(LIB libnidaqmx.so m libyaml-cpp.a pthread)
 set(DAQMXLIBPATH "C:/Program\ Files\ (x86)/National\ Instruments/Shared/ExternalCompilerSupport/C/lib64/gcc")
+
+
+
+
 #find_library(DAQMXLIBPATH NAMES nidaqmx HNTS "C:/Program\ Files\ (x86)/National\ Instruments/Shared/ExternalCompilerSupport/C/lib64/gcc")
 
 # add_executable(ContGen-ExtClk hardware_test/ContGen-ExtClk.cpp)
@@ -40,10 +55,10 @@ set(DAQMXLIBPATH "C:/Program\ Files\ (x86)/National\ Instruments/Shared/External
 # target_link_directories(ContGen-ExtClk-Update PUBLIC lib)
 # target_link_libraries(ContGen-ExtClk-Update PUBLIC libnidaqmx.so m)
 
-add_executable(ConRW hardware_test/ConRW.cpp )
-target_include_directories(ConRW PUBLIC include include lib/Eigen lib lib/boost)
-target_link_directories(ConRW PUBLIC lib)
-target_link_libraries(ConRW PUBLIC libnidaqmx.so m)
+# add_executable(ConRW hardware_test/ConRW.cpp )
+# target_include_directories(ConRW PUBLIC include include lib/Eigen lib lib/boost)
+# target_link_directories(ConRW PUBLIC lib )
+# target_link_libraries(ConRW PUBLIC libnidaqmx.so m)
 
 # add_executable(SOC hardware_test/second_order_oscillator.cpp)
 # target_include_directories(SOC PUBLIC include lib/Eigen lib lib/boost)
@@ -52,15 +67,15 @@ target_link_libraries(ConRW PUBLIC libnidaqmx.so m)
 
 # add_executable(cppVersion hardware_test/cppVersion.cpp)
 
-add_executable(taskLoop hardware_test/taskLoop.cpp)
-target_include_directories(taskLoop PUBLIC include lib/Eigen lib lib/boost)
-target_link_directories(taskLoop PUBLIC lib)
-target_link_libraries(taskLoop PUBLIC libnidaqmx.so m)
+# add_executable(taskLoop hardware_test/taskLoop.cpp)
+# target_include_directories(taskLoop PUBLIC include lib/Eigen lib lib/boost)
+# target_link_directories(taskLoop PUBLIC lib)
+# target_link_libraries(taskLoop PUBLIC libnidaqmx.so m)
 
-add_executable(distRej hardware_test/distRej.cpp)
-target_include_directories(distRej PUBLIC include lib/Eigen lib lib/boost)
-target_link_directories(distRej PUBLIC lib)
-target_link_libraries(distRej PUBLIC libnidaqmx.so m)
+# add_executable(distRej hardware_test/distRej.cpp)
+# target_include_directories(distRej PUBLIC include lib/Eigen lib lib/boost)
+# target_link_directories(distRej PUBLIC lib)
+# target_link_libraries(distRej PUBLIC libnidaqmx.so m)
 
 # add_executable(scanPhase hardware_test/scanPhase.cpp)
 # target_include_directories(scanPhase PUBLIC include lib/Eigen lib lib/boost)
@@ -72,17 +87,29 @@ target_link_libraries(distRej PUBLIC libnidaqmx.so m)
 # target_link_directories(scanAmp PUBLIC lib)
 # target_link_libraries(scanAmp PUBLIC libnidaqmx.so m)
 
-add_executable(distRejTemplate hardware_test/distRejTemplate.cpp)
-target_include_directories(distRejTemplate PUBLIC include lib/Eigen lib lib/boost)
-target_link_directories(distRejTemplate PUBLIC lib)
-target_link_libraries(distRejTemplate PUBLIC libnidaqmx.so m)
+# add_executable(distRejTemplate hardware_test/distRejTemplate.cpp)
+# target_include_directories(distRejTemplate PUBLIC include lib/Eigen lib lib/boost)
+# target_link_directories(distRejTemplate PUBLIC lib)
+# target_link_libraries(distRejTemplate PUBLIC libnidaqmx.so m)
 
-add_executable(distRejSwitching hardware_test/distRejSwitching.cpp)
-target_include_directories(distRejSwitching PUBLIC include lib/Eigen lib lib/boost)
-target_link_directories(distRejSwitching PUBLIC lib)
-target_link_libraries(distRejSwitching PUBLIC libnidaqmx.so m)
+# add_executable(distRejSwitching hardware_test/distRejSwitching.cpp)
+# target_include_directories(distRejSwitching PUBLIC include lib/Eigen lib lib/boost)
+# target_link_directories(distRejSwitching PUBLIC lib)
+# target_link_libraries(distRejSwitching PUBLIC libnidaqmx.so m)
 
-add_executable(distRejAFC hardware_test/distRejAFC.cpp)
-target_include_directories(distRejAFC PUBLIC include lib/Eigen lib lib/boost)
-target_link_directories(distRejAFC PUBLIC lib)
-target_link_libraries(distRejAFC PUBLIC libnidaqmx.so m)
+# add_executable(distRejAFC hardware_test/distRejAFC.cpp)
+# target_include_directories(distRejAFC PUBLIC include lib/Eigen lib lib/boost)
+# target_link_directories(distRejAFC PUBLIC lib)
+# target_link_libraries(distRejAFC PUBLIC libnidaqmx.so m)
+
+
+add_executable(daq_wrapper src/daq_wrapper.cpp src/xjk/controlFunction.cpp)
+target_include_directories(daq_wrapper PUBLIC ${HEADER_DIRS})
+target_link_directories(daq_wrapper PUBLIC ${LIB_DIRS})
+target_link_libraries(daq_wrapper PUBLIC ${LIB})
+
+
+add_executable(daq_sine src/daq_sine.cpp)
+target_include_directories(daq_sine PUBLIC ${HEADER_DIRS})
+target_link_directories(daq_sine PUBLIC ${LIB_DIRS})
+target_link_libraries(daq_sine PUBLIC ${LIB})

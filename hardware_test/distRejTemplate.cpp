@@ -99,8 +99,8 @@ int main(void)
 	char errBuff[2048] = {'\0'};
 	TaskHandle taskHandle_w = 0, taskHandle_r = 0;
 
-	const int32 samplesPerChan = 1000;
-	const float64 sampleFs = 25000.0, dist_freq = 35.0;
+	const int32 samplesPerChan = 100;
+	const float64 sampleFs = 5000.0, dist_freq = 35.0;
 
 	const int32 writeNumChan = 2;
 	float64 write_origin[samplesPerChan * writeNumChan] = {0};
@@ -110,7 +110,7 @@ int main(void)
 	float64 read_origin[samplesPerChan * readNumChan] = {0};
 	float64 *readChan0 = &read_origin[0];
 
-	const float runTime = 10, warmUp = 1.0; // sec
+	const float runTime = 30, warmUp = 1.0; // sec
 	const int32 totalNumSamples = (runTime + warmUp) * sampleFs + sampleFs;
 	std::cout << "run time: " << runTime << " "
 			  << "total data points: " << totalNumSamples << std::endl;
@@ -126,7 +126,7 @@ int main(void)
 	int64 index = 0;
 	float64 globalTime = 0;
 
-	DefaultController controller(dist_freq * 2 * PI, -15.0, 0.0, 1.0 / sampleFs);
+	DefaultController controller(21.5 * 2 * PI, -30.0, 0.0, 1.0 / sampleFs);
 
 	/*********************************************/
 	// DAQmx Configure Code
@@ -157,9 +157,9 @@ int main(void)
 		for (int i = 0; i < samplesPerChan; i++)
 		{
 
-			float64 d = 2.0 * sin(globalTime * dist_freq * 2 * PI);
+			float64 d = 1.5 * sin(globalTime * dist_freq * 2 * PI);
 			float64 u = 0;
-			float64 y = (read_origin[i] - 0.00025) * 8000;
+			float64 y = (read_origin[i]) * 8000 - 1.7;
 
 			data.t.push_back(globalTime);
 			data.d.push_back(d);
@@ -183,9 +183,9 @@ int main(void)
 		for (int i = 0; i < samplesPerChan; i++)
 		{
 
-			float64 d = 2.0 * sin(globalTime * dist_freq * 2 * PI);
+			float64 d = 1.5 * sin(globalTime * dist_freq * 2 * PI);
 			float64 u = 0;
-			float64 y = (read_origin[i] - 0.00025) * 8000;
+			float64 y = (read_origin[i]) * 8000 - 1.7;
 
 			defaultController(&controller, y, u);
 

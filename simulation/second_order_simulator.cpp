@@ -6,11 +6,27 @@
 #include "NIDAQmx.h"
 #include "msgpack.hpp"
 
-#include "controller/default_controller.hpp"
-#include "logger/data_logging.hpp"
+#include "controller/mt_controller.hpp"
 
 #define _USE_MATH_DEFINES 
 
+
+typedef std::vector<double> array_t;
+
+struct datapack_t
+{
+	array_t t;
+	array_t y;
+	array_t y_f;
+	array_t d;
+	array_t u;
+	array_t u_a;
+	array_t y_d;
+	// array_t zeta
+	MSGPACK_DEFINE_MAP(t, y, d, u, u_a, y_d, y_f);
+};
+
+datapack_t data;
 
 void (*controlTaskRun)(const float64 &y, float64 &u) = NULL;
 
@@ -22,9 +38,6 @@ void controlTaskInit()
 
 int main(void)
 {
-	int32 error = 0;
-	char errBuff[2048] = {'\0'};
-	TaskHandle taskHandle_w = 0, taskHandle_r = 0;
 
 	const int32 samplesPerChan = 1000;
 	const float64 sampleFs = 25000.0, dist_freq = 35.0;
@@ -53,7 +66,7 @@ int main(void)
 	int64 index = 0;
 	float64 globalTime = 0;
 
-	DefaultController controller(dist_freq * M_2_PI, -15.0, 0.0, 1.0 / sampleFs);
+	MTController controller({0.0, 0.0}, dist_freq * M_2_PI, -15.0, 0.0, 1.0 / sampleFs, 3.95);
 
 
 	for (int i = 0; i < warmUp * sampleFs / samplesPerChan; i++)

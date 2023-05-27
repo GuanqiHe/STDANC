@@ -218,19 +218,19 @@ int main(void)
 		for (int i = 0; i < samplesPerChan; i++)
 		{
 
-			float64 d = 0.5 * sin(globalTime * dist_freq * 2 * PI);
+			float64 d = 1.5 * sin(globalTime * dist_freq * 2 * PI);
 			float64 u = 0;
 			float64 y = (read_origin[i] - 0.00025) * 8000;
 
-			lasty = 1 / sampleFs * (y - lasty) * dist_freq * 2 * 2 * PI + lasty;
+			// lasty = 1 / sampleFs * (y - lasty) * dist_freq * 2 * 2 * PI + lasty;
 
 			data.t.push_back(globalTime);
 			data.d.push_back(d);
 			data.u.push_back(u);
 			data.y.push_back(y);
-			data.u_a.push_back(controller.u_a);
-			data.y_d.push_back(controller.y_d);
-			data.y_f.push_back(lasty);
+			// data.u_a.push_back(controller.u_a);
+			// data.y_d.push_back(controller.y_d);
+			// data.y_f.push_back(lasty);
 
 			writeChan0[i] = d;
 			writeChan1[i] = u;
@@ -253,16 +253,16 @@ int main(void)
 			float64 u = 0;
 			float64 y = (read_origin[i] - 0.00025) * 8000;
 
-			lasty = 1 / sampleFs * (y - lasty) * dist_freq * 2 * 2 * PI + lasty;
+			// lasty = 1 / sampleFs * (y - lasty) * dist_freq * 2 * 2 * PI + lasty;
 			afcController(&controller, y, u);
 
 			data.t.push_back(globalTime);
 			data.d.push_back(d);
 			data.u.push_back(u);
 			data.y.push_back(y);
-			data.u_a.push_back(controller.u_a);
-			data.y_d.push_back(controller.y_d);
-			data.y_f.push_back(lasty);
+			// data.u_a.push_back(controller.u_a);
+			// data.y_d.push_back(controller.y_d);
+			// data.y_f.push_back(lasty);
 
 			writeChan0[i] = d;
 			writeChan1[i] = u;
