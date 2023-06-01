@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "x64 (gdb) Launch",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/bin/ConRW",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": ".",
+        "environment": [],
+        "showDisplayString": true,
+        "MIMode": "gdb",
+        "miDebuggerPath": "C:/build/23.0/x64/sysroots/x86_64-w64-mingw32/usr/bin/x86_64-nilrt-linux/x86_64-nilrt-linux-gdb.exe",
+        "miDebuggerServerAddress": "172.22.11.2:9092"
+      }
+    ]
+  }
