@@ -65,7 +65,7 @@ struct controller_t
 
 
 
-void* controllerInit(void);
+void* controllerInit(int argc, char *argv[]);
 
 double controllerCompute(void * ctrl_ptr, double d);
 

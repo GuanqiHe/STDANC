@@ -7,7 +7,7 @@
 
 #include "controlFunction.h"
 
-void *controllerInit(void)
+void *controllerInit(int argc, char *argv[])
 {
     controller_t *ctrl_ptr = new controller_t();
 

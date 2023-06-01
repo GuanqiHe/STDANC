@@ -5,3 +5,7 @@ lib/
 *.mat
 *.bin
 run/
+test/
+*.gif
+*.m4a
+files/

@@ -35,7 +35,7 @@ project(ActiveNoiseCancellation)
 
 set(EXECUTABLE_OUTPUT_PATH ../run)
 set(CMAKE_BUILD_TYPE Release)
-set(HEADER_DIRS include lib/Eigen lib lib/boost src lib/yaml-cpp src/xjk)
+set(HEADER_DIRS include lib/Eigen lib lib/boost src lib/yaml-cpp)
 set(LIB_DIRS include lib)
 set(LIB libnidaqmx.so m libyaml-cpp.a pthread)
 set(DAQMXLIBPATH "C:/Program\ Files\ (x86)/National\ Instruments/Shared/ExternalCompilerSupport/C/lib64/gcc")
@@ -104,10 +104,19 @@ set(DAQMXLIBPATH "C:/Program\ Files\ (x86)/National\ Instruments/Shared/External
 
 
 add_executable(daq_wrapper src/daq_wrapper.cpp src/xjk/controlFunction.cpp)
-target_include_directories(daq_wrapper PUBLIC ${HEADER_DIRS})
+target_include_directories(daq_wrapper PUBLIC ${HEADER_DIRS} src/xjk)
 target_link_directories(daq_wrapper PUBLIC ${LIB_DIRS})
 target_link_libraries(daq_wrapper PUBLIC ${LIB})
 
+add_executable(mtcontroller src/daq_wrapper.cpp src/hgq/controlFunction.cpp)
+target_include_directories(mtcontroller PUBLIC ${HEADER_DIRS} src/hgq)
+target_link_directories(mtcontroller PUBLIC ${LIB_DIRS})
+target_link_libraries(mtcontroller PUBLIC ${LIB})
+
+add_executable(mtcontroller_sim src/daq_sim.cpp src/hgq/controlFunction.cpp)
+target_include_directories(mtcontroller_sim PUBLIC ${HEADER_DIRS} src/hgq)
+target_link_directories(mtcontroller_sim PUBLIC ${LIB_DIRS})
+target_link_libraries(mtcontroller_sim PUBLIC ${LIB})
 
 add_executable(daq_sine src/daq_sine.cpp)
 target_include_directories(daq_sine PUBLIC ${HEADER_DIRS})

@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 	YAML::Node config = YAML::LoadFile(config_path);
 	const float64 sampleFs = config["sample_fs"].as<float64>();
 	const float64 dist_freq = config["dist_freq"].as<float64>();
+	const float64 dist_gain = config["dist_gain"].as<float64>();
 	const float64 runTime = config["run_time"].as<float64>(); // sec
 	const float64 warmUp = config["warm_up"].as<float64>();	  // sec
 	const float64 startWait = config["start_wait"].as<float64>();	  // sec
@@ -130,7 +131,7 @@ int main(int argc, char *argv[])
 	for (int32 i = 0; i < warmUp * sampleFs; i++)
 	{
 
-		float64 d = 2.0 * sin(globalTime * dist_freq * 2 * M_PI);
+		float64 d = dist_gain * sin(globalTime * dist_freq * 2 * M_PI);
 		float64 u = 0;
 		float64 y = readChan0[0] * analog_read_gain + analog_read_bias;
 
@@ -163,7 +164,7 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < runTime * sampleFs; i++)
 	{
 
-		float64 d = 2.0 * sin(globalTime * dist_freq * 2 * M_PI);
+		float64 d = dist_gain * sin(globalTime * dist_freq * 2 * M_PI);
 		float64 y = readChan0[0] * analog_read_gain + analog_read_bias;
 		float64 u = 0;
 
