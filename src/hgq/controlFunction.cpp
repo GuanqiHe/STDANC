@@ -23,7 +23,7 @@ void *controllerInit(int argc, char *argv[])
 
     MTController *ctrl_ptr = new MTController(w_star, g1, g2, dt);
 
-    int sample_len = (config["run_time"].as<double>()) * config["sample_fs"].as<double>();
+    int sample_len = (config["run_time"].as<double>()) * config["sample_fs"].as<double>() + 1;
 
     logger.init({"t", "y", "w0", "w1"}, sample_len, config["controller_log_path"].as<std::string>());
 
