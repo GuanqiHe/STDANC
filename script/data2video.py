@@ -18,8 +18,7 @@ def circle_coords(r, step):
 
         t += step
 
-       
-
+    
    return coords
 
  

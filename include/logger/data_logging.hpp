@@ -1,17 +1,43 @@
 #pragma once
+#include <iostream>
+#include <vector>
+#include <string>
+#include <fstream>
 
 #include "msgpack.hpp"
 
-typedef std::vector<double> array_t;
-
-struct datapack_t
+struct data_logger
 {
-	array_t t;
-	array_t y;
-	array_t d;
-	array_t u;
-	array_t phi;
-	MSGPACK_DEFINE_MAP(t, y, d, u);
-};
+	std::vector<std::string> name;
+	std::vector<std::vector<double>> data;
+	std::string file_path;
+	std::vector<std::vector<double>>::iterator it;
 
-extern datapack_t data;
+	void log(std::initializer_list<double> &&element)
+	{
+		*it = (std::move(element));
+		it++;
+	}
+
+	void init(std::vector<std::string> name_list, int sample_len, std::string path)
+	{
+		name = name_list;
+		data.resize(sample_len);
+		for (auto &inner : data)
+		{
+			inner.reserve(name.size());
+		}
+		file_path = path;
+
+		it = data.begin();
+	}
+
+	void write()
+	{
+		std::ofstream stream(file_path, std::ios::binary);
+		msgpack::packer<std::ofstream> packer(stream);
+		packer.pack(name);
+		packer.pack(data);
+		stream.close();
+	}
+};

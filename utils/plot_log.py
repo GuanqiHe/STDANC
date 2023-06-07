@@ -43,8 +43,14 @@ if __name__ == '__main__':
 
         f.close()
 
-    except:
+    except FileNotFoundError:
         raise Exception("Fail to open file")
+    
+    except StopIteration:
+        raise Exception("Wrong data format")
+    
+    except Exception as e:
+        raise e
 
     # print(data.keys())
 
