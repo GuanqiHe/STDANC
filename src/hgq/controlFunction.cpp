@@ -1,4 +1,5 @@
 #include "controlFunction.h"
+#include "logger/data_logging.hpp"
 
 data_logger logger;
 
