@@ -1,13 +1,23 @@
+# project specific information
+cmake_minimum_required(VERSION 3.19)
+project(ActiveNoiseCancellation)
+
+
+
+
 if (NOT DEFINED SYSTEM_TYPE)
     set (SYSTEM_TYPE "Windows")
     message("System type not defined, set Windows as default")
 endif()
-
 message("System: ${SYSTEM_TYPE}")
+
+
 
 if (DEFINED BUILD_SIMULATION_ONLY)
     message("Detect flag -DBUILD_SIMULATION_ONLY=${BUILD_SIMULATION_ONLY}")
 endif()
+
+
 
 
 if (${SYSTEM_TYPE} STREQUAL "Windows")
@@ -44,15 +54,11 @@ else ()
 endif()
 
 
-# project specific information
-cmake_minimum_required(VERSION 3.19)
-project(ActiveNoiseCancellation)
-
 
 
 set(EXECUTABLE_OUTPUT_PATH ../run)
 set(CMAKE_BUILD_TYPE Release)
-set(HEADER_DIRS include lib/Eigen lib lib/boost src lib/yaml-cpp)
+set(HEADER_DIRS include lib/Eigen lib lib/boost src lib/yaml-cpp lib/msgpack/include)
 set(LIB_DIRS include lib)
 set(LIB libnidaqmx.so m libyaml-cpp.a pthread)
 
