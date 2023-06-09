@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <filesystem>
 
 #include "NIDAQmx.h"
 #include "yaml.h"
@@ -22,6 +23,8 @@ int32 CVICALLBACK DoneCallback(TaskHandle taskHandle, int32 status, void *callba
 
 inline int64 timeConversion(int64 t) { return t + 2082844800; }
 
+namespace fs = std::filesystem;
+
 int main(int argc, char *argv[])
 {
 	std::string config_path = "config.yaml";
@@ -32,6 +35,7 @@ int main(int argc, char *argv[])
 
 	// read parameter from config file
 	YAML::Node config = YAML::LoadFile(config_path);
+	const std::string log_folder = config["log_folder"].as<std::string>();
 	const float64 sampleFs = config["sample_fs"].as<float64>();
 	const float64 dist_freq = config["dist_freq"].as<float64>();
 	const float64 dist_gain = config["dist_gain"].as<float64>();
@@ -43,8 +47,28 @@ int main(int argc, char *argv[])
 	// const std::string log_path =  config["log_path"].as<std::string>();
 	const int sample_len = (config["run_time"].as<double>() + config["warm_up"].as<double>()) * config["sample_fs"].as<double>() + 1;
 
-	data_logger  hardware_logger;
-	 hardware_logger.init({"t", "y", "d", "u"}, sample_len, config["data_log_path"].as<std::string>());
+	try
+	{
+		if (!fs::exists(log_folder))
+		{
+			if (fs::create_directory(log_folder))
+			{
+				printf("created log dir %s \n", log_folder.c_str());
+			}
+			else
+			{
+				printf("Failed to create log dir!\n");
+				return 1;
+			}
+		}
+	}
+	catch (std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+
+	data_logger hardware_logger;
+	hardware_logger.init({"t", "y", "d", "u"}, sample_len, log_folder + "/" + config["data_log_path"].as<std::string>());
 
 	printf("config file path: %s \n", config_path.c_str());
 	// printf("log file path: %s \n", log_path.c_str());
@@ -127,7 +151,7 @@ int main(int argc, char *argv[])
 		index += 1;
 		globalTime += 1 / sampleFs;
 
-		 hardware_logger.log({globalTime, y, d, u});
+		hardware_logger.log({globalTime, y, d, u});
 
 		// DAQmxErrChk(DAQmxWriteAnalogScalarF64(taskHandle_w, 0, timeout, writeChan0[0], NULL));
 		DAQmxErrChk(DAQmxReadAnalogScalarF64(taskHandle_r, timeout, &readChan0[0], NULL));
@@ -159,7 +183,7 @@ int main(int argc, char *argv[])
 		index += 1;
 		globalTime += 1 / sampleFs;
 
-		 hardware_logger.log({globalTime, y, d, u});
+		hardware_logger.log({globalTime, y, d, u});
 
 		// DAQmxErrChk(DAQmxWriteAnalogScalarF64(taskHandle_w, 0, timeout, writeChan0[0], NULL));
 		DAQmxErrChk(DAQmxReadAnalogScalarF64(taskHandle_r, timeout, &readChan0[0], NULL));
@@ -196,7 +220,7 @@ Error:
 		printf("DAQmx Error: %s\n", errBuff);
 	printf("End of program\n");
 
-	 hardware_logger.write();
+	hardware_logger.write();
 
 	return 0;
 }
