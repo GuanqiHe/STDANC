@@ -17,19 +17,20 @@ void *controllerInit(int argc, char *argv[])
 
     YAML::Node config = YAML::LoadFile(config_path);
 
-    double w_star = config["dist_freq"].as<double>() * M_PI * 2;
-    double theta1 = config["theta1"].as<double>();
-    double theta2 = config["theta2"].as<double>();
-    double alpha = config["alpha"].as<double>();
-    double epsilon = config["epsilon"].as<double>();
-    double gamma = config["gamma"].as<double>();
-    double dt = 1 / config["sample_fs"].as<double>();
+    const std::string log_folder = config["log_folder"].as<std::string>();
+    const double w_star = config["dist_freq"].as<double>() * M_PI * 2;
+    const double theta1 = config["theta1"].as<double>();
+    const double theta2 = config["theta2"].as<double>();
+    const double alpha = config["alpha"].as<double>();
+    const double epsilon = config["epsilon"].as<double>();
+    const double gamma = config["gamma"].as<double>();
+    const double dt = 1 / config["sample_fs"].as<double>();
 
     SwitchingBasedAFC *ctrl_ptr = new SwitchingBasedAFC(w_star, dt, theta1, theta2, alpha, epsilon, gamma);
 
     int sample_len = (config["run_time"].as<double>()) * config["sample_fs"].as<double>();
 
-    logger.init({"t", "y", "w0", "w1", "zeta0", "zeta1", "xi0", "xi1", "eta0", "eta1"}, sample_len, config["controller_log_path"].as<std::string>());
+    logger.init({"t", "y", "w0", "w1", "zeta0", "zeta1", "xi0", "xi1", "eta0", "eta1"}, sample_len, log_folder + '/' + config["controller_log_path"].as<std::string>());
 
     return (void *)(ctrl_ptr);
 }
