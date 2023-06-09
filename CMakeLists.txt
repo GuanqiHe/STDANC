@@ -58,8 +58,8 @@ endif()
 
 set(EXECUTABLE_OUTPUT_PATH ../run)
 set(CMAKE_BUILD_TYPE Release)
-set(HEADER_DIRS include lib/Eigen lib lib/boost src lib/yaml-cpp lib/msgpack/include)
-set(LIB_DIRS include lib)
+set(HEADER_DIRS include lib/Eigen lib lib/boost src lib/yaml-cpp lib/msgpack/include libs/nidaqmx)
+set(LIB_DIRS lib libs/nidaqmx)
 set(LIB libnidaqmx.so m libyaml-cpp.a pthread)
 
 if(DEFINED PREFIX)

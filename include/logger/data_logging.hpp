@@ -22,11 +22,7 @@ struct data_logger
 	void init(std::vector<std::string> name_list, int sample_len, std::string path)
 	{
 		name = name_list;
-		data.resize(sample_len);
-		for (auto &inner : data)
-		{
-			inner.reserve(name.size());
-		}
+		data = std::vector<std::vector<double>>(sample_len, std::vector<double>(name.size(), 0));
 		file_path = path;
 
 		it = data.begin();

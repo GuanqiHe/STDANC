@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 from scipy.io import savemat
+import code
 
 
 if __name__ == '__main__':
@@ -34,10 +35,10 @@ if __name__ == '__main__':
         var_name = next(unpacker)
         print(var_name)
         value = next(unpacker)
+        
+        arr = np.array(value)
 
-        value = np.array(value)
-
-        data = {var_name[i]: value[:, i] for i in range(len(var_name))}
+        data = {var_name[i]: arr[:, i] for i in range(len(var_name))}
         
         # print(data)
 

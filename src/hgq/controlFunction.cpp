@@ -1,6 +1,6 @@
 #include "controlFunction.h"
 
-data_logger logger;
+data_logger software_logger;
 
 void *controllerInit(int argc, char *argv[])
 {
@@ -25,7 +25,7 @@ void *controllerInit(int argc, char *argv[])
 
     int sample_len = (config["run_time"].as<double>()) * config["sample_fs"].as<double>() + 1;
 
-    logger.init({"t", "y", "w0", "w1"}, sample_len, config["controller_log_path"].as<std::string>());
+    software_logger.init({"t", "y", "w0", "w1"}, sample_len, config["controller_log_path"].as<std::string>());
 
     return (void *)(ctrl_ptr);
 }
@@ -34,7 +34,7 @@ double controllerCompute(void *ctrl_ptr, double y)
 {
     MTController *ptr = (MTController *)(ctrl_ptr);
 
-    logger.log({ptr->tw, ptr->out, ptr->w[0], ptr->w[1]});
+    software_logger.log({ptr->tw, ptr->out, ptr->w[0], ptr->w[1]});
 
     ptr->setInput(y);
     return ptr->computeOutput();
@@ -42,7 +42,7 @@ double controllerCompute(void *ctrl_ptr, double y)
 
 void controllerFinish(void *ctrl_ptr)
 {
-    logger.write();
+    software_logger.write();
     MTController *ptr = (MTController *)(ctrl_ptr);
     delete ptr;
 }

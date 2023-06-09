@@ -43,8 +43,8 @@ int main(int argc, char *argv[])
 	// const std::string log_path =  config["log_path"].as<std::string>();
 	const int sample_len = (config["run_time"].as<double>() + config["warm_up"].as<double>()) * config["sample_fs"].as<double>() + 1;
 
-	data_logger logger;
-	logger.init({"t", "y", "d", "u"}, sample_len, config["data_log_path"].as<std::string>());
+	data_logger  hardware_logger;
+	 hardware_logger.init({"t", "y", "d", "u"}, sample_len, config["data_log_path"].as<std::string>());
 
 	printf("config file path: %s \n", config_path.c_str());
 	// printf("log file path: %s \n", log_path.c_str());
@@ -68,7 +68,8 @@ int main(int argc, char *argv[])
 
 	std::cout << "run time: " << runTime << " "
 			  << "total data points: " << totalNumSamples << " "
-			  << "Hz: " << sampleFs / samplesPerChan << std::endl;
+			  << "Hz: " << sampleFs / samplesPerChan << " "
+			  << "sample len: " << sample_len << std::endl;
 
 	int64 index = 0;
 	float64 globalTime = 0;
@@ -126,7 +127,7 @@ int main(int argc, char *argv[])
 		index += 1;
 		globalTime += 1 / sampleFs;
 
-		logger.log({globalTime, y, d, u});
+		 hardware_logger.log({globalTime, y, d, u});
 
 		// DAQmxErrChk(DAQmxWriteAnalogScalarF64(taskHandle_w, 0, timeout, writeChan0[0], NULL));
 		DAQmxErrChk(DAQmxReadAnalogScalarF64(taskHandle_r, timeout, &readChan0[0], NULL));
@@ -158,7 +159,7 @@ int main(int argc, char *argv[])
 		index += 1;
 		globalTime += 1 / sampleFs;
 
-		logger.log({globalTime, y, d, u});
+		 hardware_logger.log({globalTime, y, d, u});
 
 		// DAQmxErrChk(DAQmxWriteAnalogScalarF64(taskHandle_w, 0, timeout, writeChan0[0], NULL));
 		DAQmxErrChk(DAQmxReadAnalogScalarF64(taskHandle_r, timeout, &readChan0[0], NULL));
@@ -195,7 +196,7 @@ Error:
 		printf("DAQmx Error: %s\n", errBuff);
 	printf("End of program\n");
 
-	logger.write();
+	 hardware_logger.write();
 
 	return 0;
 }
