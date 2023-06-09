@@ -56,7 +56,7 @@ endif()
 
 
 
-set(EXECUTABLE_OUTPUT_PATH ../run)
+set(EXECUTABLE_OUTPUT_PATH ../run/bin/${PREFIX})
 set(CMAKE_BUILD_TYPE Release)
 set(HEADER_DIRS include lib/Eigen lib lib/boost src lib/yaml-cpp lib/msgpack/include libs/nidaqmx)
 set(LIB_DIRS lib libs/nidaqmx)
@@ -71,19 +71,24 @@ else()
     set(simulation_exe ${PREFIX}_simulation)
 endif()
 
-if (NOT DEFINED BUILD_SIMULATION_ONLY)
-    add_executable(${hardware_exe} src/daq_wrapper.cpp ${SRC_DIR}/controlFunction.cpp)
-    target_include_directories(${hardware_exe} PUBLIC ${HEADER_DIRS} ${SRC_DIR})
-    target_link_directories(${hardware_exe} PUBLIC ${LIB_DIRS})
-    target_link_libraries(${hardware_exe} PUBLIC ${LIB})
+if (NOT DEFINED BUILD_HARDWARE_TEST)
+
+    if (NOT DEFINED BUILD_SIMULATION_ONLY)
+        add_executable(${hardware_exe} src/daq_wrapper.cpp ${SRC_DIR}/controlFunction.cpp)
+        target_include_directories(${hardware_exe} PUBLIC ${HEADER_DIRS} ${SRC_DIR})
+        target_link_directories(${hardware_exe} PUBLIC ${LIB_DIRS})
+        target_link_libraries(${hardware_exe} PUBLIC ${LIB})
+    endif()
+
+    add_executable(${simulation_exe} src/daq_sim.cpp ${SRC_DIR}/controlFunction.cpp)
+    target_include_directories(${simulation_exe} PUBLIC ${HEADER_DIRS} ${SRC_DIR})
+    target_link_directories(${simulation_exe} PUBLIC ${LIB_DIRS})
+    target_link_libraries(${simulation_exe} PUBLIC ${LIB})
+
+else()
 
     add_executable(daq_sine src/daq_sine.cpp)
     target_include_directories(daq_sine PUBLIC ${HEADER_DIRS})
     target_link_directories(daq_sine PUBLIC ${LIB_DIRS})
     target_link_libraries(daq_sine PUBLIC ${LIB})
 endif()
-
-add_executable(${simulation_exe} src/daq_sim.cpp ${SRC_DIR}/controlFunction.cpp)
-target_include_directories(${simulation_exe} PUBLIC ${HEADER_DIRS} ${SRC_DIR})
-target_link_directories(${simulation_exe} PUBLIC ${LIB_DIRS})
-target_link_libraries(${simulation_exe} PUBLIC ${LIB})

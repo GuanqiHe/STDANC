@@ -16,6 +16,7 @@ void *controllerInit(int argc, char *argv[])
 
     YAML::Node config = YAML::LoadFile(config_path);
 
+    const std::string log_folder = config["log_folder"].as<std::string>();
     double w_star = config["dist_freq"].as<double>() * M_PI * 2;
     double g1 = config["g1"].as<double>();
     double g2 = config["g2"].as<double>();
@@ -25,7 +26,7 @@ void *controllerInit(int argc, char *argv[])
 
     int sample_len = (config["run_time"].as<double>()) * config["sample_fs"].as<double>() + 1;
 
-    software_logger.init({"t", "y", "w0", "w1"}, sample_len, config["controller_log_path"].as<std::string>());
+    software_logger.init({"t", "y", "w0", "w1"}, sample_len, log_folder + '/' + config["controller_log_path"].as<std::string>());
 
     return (void *)(ctrl_ptr);
 }
