@@ -10,3 +10,4 @@ test/
 *.m4a
 files/
 CMakeFiles/
+data/
