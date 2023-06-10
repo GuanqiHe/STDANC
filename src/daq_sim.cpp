@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 	float64 timeout = 10.0 / sampleFs;
 	void *ctrl_ptr = controllerInit(argc, argv);
 
-	std::ofstream stream(config["data_log_path"].as<std::string>(), std::ios::binary);
+	std::ofstream stream(config["device_log_path"].as<std::string>(), std::ios::binary);
 	msgpack::packer<std::ofstream> packer(stream);
 	datapack_t data;
 	data.t.reserve(totalNumSamples);

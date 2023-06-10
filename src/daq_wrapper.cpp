@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 	// read parameter from config file
 	YAML::Node config = YAML::LoadFile(config_path);
 	const std::string log_folder = config["log_folder"].as<std::string>();
+	const std::string device_log_path = log_folder + "/" + config["device_log_path"].as<std::string>();
 	const float64 sampleFs = config["sample_fs"].as<float64>();
 	const float64 dist_freq = config["dist_freq"].as<float64>();
 	const float64 dist_gain = config["dist_gain"].as<float64>();
@@ -68,10 +69,10 @@ int main(int argc, char *argv[])
 	}
 
 	data_logger hardware_logger;
-	hardware_logger.init({"t", "y", "d", "u"}, sample_len, log_folder + "/" + config["data_log_path"].as<std::string>());
+	hardware_logger.init({"t", "y", "d", "u"}, sample_len, device_log_path);
 
 	printf("config file path: %s \n", config_path.c_str());
-	// printf("log file path: %s \n", log_path.c_str());
+	printf("log file path: %s \n", device_log_path.c_str());
 
 	int32 error = 0;
 	char errBuff[2048] = {'\0'};
