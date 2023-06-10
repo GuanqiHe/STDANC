@@ -27,11 +27,11 @@ void *controllerInit(int argc, char *argv[])
     const double gamma = config["gamma"].as<double>();
     const double dt = 1 / config["sample_fs"].as<double>();
 
-    SwitchingBasedAFC *ctrl_ptr = new SwitchingBasedAFC(w_star, dt, theta1, theta2, alpha, epsilon, gamma);
+    SwitchingAFC *ctrl_ptr = new SwitchingAFC(w_star, dt, theta1, theta2, alpha, epsilon, gamma, 0.1);
 
     int sample_len = (config["run_time"].as<double>()) * config["sample_fs"].as<double>();
 
-    logger.init({"t", "y", "w0", "w1", "zeta0", "zeta1", "xi0", "xi1", "eta0", "eta1"}, sample_len, controller_log_path);
+    logger.init({"t", "y", "w0", "w1", "zeta0", "zeta1", "xi0", "xi1", "eta0", "eta1", "theta0", "theta1", "switch", "reset"}, sample_len, controller_log_path);
 
     std::cout << "Controller log path: " << controller_log_path << std::endl;
 
@@ -40,9 +40,9 @@ void *controllerInit(int argc, char *argv[])
 
 double controllerCompute(void *ctrl_ptr, double y)
 {
-    SwitchingBasedAFC *ptr = (SwitchingBasedAFC *)(ctrl_ptr);
+    SwitchingAFC *ptr = (SwitchingAFC *)(ctrl_ptr);
 
-    logger.log({ptr->tw, ptr->out, ptr->w[0], ptr->w[1], ptr->w[2], ptr->w[3], ptr->w[4], ptr->w[5], ptr->w[6], ptr->w[7]});
+    logger.log({ptr->tw, ptr->out, ptr->w[0], ptr->w[1], ptr->w[2], ptr->w[3], ptr->w[4], ptr->w[5], ptr->w[6], ptr->w[7], ptr->theta_hat(0), ptr->theta_hat(1), ptr->switching_signal, ptr->reset_signal});
 
     ptr->setInput(y);
     return ptr->computeOutput();
@@ -51,6 +51,6 @@ double controllerCompute(void *ctrl_ptr, double y)
 void controllerFinish(void *ctrl_ptr)
 {
     logger.write();
-    SwitchingBasedAFC *ptr = (SwitchingBasedAFC *)(ctrl_ptr);
+    SwitchingAFC *ptr = (SwitchingAFC *)(ctrl_ptr);
     delete ptr;
 }

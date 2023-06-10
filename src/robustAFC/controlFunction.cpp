@@ -27,7 +27,7 @@ void *controllerInit(int argc, char *argv[])
     const double gamma = config["gamma"].as<double>();
     const double dt = 1 / config["sample_fs"].as<double>();
 
-    SwitchingBasedAFC *ctrl_ptr = new SwitchingBasedAFC(w_star, dt, theta1, theta2, alpha, epsilon, gamma);
+    RobustAFC *ctrl_ptr = new RobustAFC(w_star, dt, theta1, theta2, alpha, epsilon, gamma);
 
     int sample_len = (config["run_time"].as<double>()) * config["sample_fs"].as<double>();
 
@@ -40,7 +40,7 @@ void *controllerInit(int argc, char *argv[])
 
 double controllerCompute(void *ctrl_ptr, double y)
 {
-    SwitchingBasedAFC *ptr = (SwitchingBasedAFC *)(ctrl_ptr);
+    RobustAFC *ptr = (RobustAFC *)(ctrl_ptr);
 
     logger.log({ptr->tw, ptr->out, ptr->w[0], ptr->w[1], ptr->w[2], ptr->w[3], ptr->w[4], ptr->w[5], ptr->w[6], ptr->w[7]});
 
@@ -51,6 +51,6 @@ double controllerCompute(void *ctrl_ptr, double y)
 void controllerFinish(void *ctrl_ptr)
 {
     logger.write();
-    SwitchingBasedAFC *ptr = (SwitchingBasedAFC *)(ctrl_ptr);
+    RobustAFC *ptr = (RobustAFC *)(ctrl_ptr);
     delete ptr;
 }

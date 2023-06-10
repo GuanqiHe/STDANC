@@ -13,7 +13,7 @@
 #include <boost/numeric/odeint.hpp>
 #include "msgpack.hpp"
 
-class SwitchingBasedAFC
+class RobustAFC
 {
 public:
 	typedef std::vector<double> state_type;
@@ -24,7 +24,7 @@ public:
 	state_type w;
 	boost::numeric::odeint::runge_kutta_dopri5<state_type> stepper;
 
-	SwitchingBasedAFC(double w_star, double dt, double theta1, double theta2, double alpha_, double eps, double gamma_, double bound = 3.95) : w(8), w_star_(w_star), dt_(dt), bound_(bound), alpha(alpha_), epsilon(eps), gamma(gamma_)
+	RobustAFC(double w_star, double dt, double theta1, double theta2, double alpha_, double eps, double gamma_, double bound = 3.95) : w(8), w_star_(w_star), dt_(dt), bound_(bound), alpha(alpha_), epsilon(eps), gamma(gamma_)
 	{
 		tw = 0.0;
 		out = 0.0;
@@ -60,7 +60,7 @@ public:
 
 	double computeOutput()
 	{
-		auto func = std::bind(&SwitchingBasedAFC::equations, &(*this), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+		auto func = std::bind(&RobustAFC::equations, &(*this), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 		stepper.do_step(func, w, tw, dt_);
 		tw += dt_;
 		return w[0];
