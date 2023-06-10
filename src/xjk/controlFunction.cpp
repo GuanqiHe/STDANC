@@ -53,7 +53,6 @@ void *controllerInit(int argc, char *argv[])
     ctrl_ptr->A = {{1.4, -0.728}, {0.728, 0}};
     ctrl_ptr->B = {{1}, {0}};
     ctrl_ptr->C = {{2, -3.0219}};
-    ctrl_ptr->S;
     ctrl_ptr->S.push_back({std::cos(ctrl_ptr->omega1), std::sin(ctrl_ptr->omega1)});
     ctrl_ptr->S.push_back({-std::sin(ctrl_ptr->omega1), std::cos(ctrl_ptr->omega1)});
 
