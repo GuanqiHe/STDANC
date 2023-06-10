@@ -1,4 +1,4 @@
-# Switching-based Time-Domain Active Noise Cancellation Algorithm
+# Switching-based Time-Domain Active Noise Cancellation
 
 ## Mathmatical Details
 
