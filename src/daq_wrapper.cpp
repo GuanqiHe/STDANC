@@ -77,7 +77,6 @@ int main(int argc, char *argv[])
 	int32 error = 0;
 	char errBuff[2048] = {'\0'};
 	TaskHandle taskHandle_w = 0, taskHandle_r = 0;
-	char trigName[256] = {0};
 
 	const int32 samplesPerChan = 1;
 

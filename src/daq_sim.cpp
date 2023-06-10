@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <filesystem>
 
 #include "NIDAQmx.h"
 #include "yaml.h"
@@ -32,6 +33,8 @@ double model_input = 0.0;
 double model_output = 0.0;
 double w_star = 50 * 2 * M_PI;
 
+namespace fs = std::filesystem;
+
 int main(int argc, char *argv[])
 {
 	std::string config_path = "config.yaml";
@@ -45,30 +48,43 @@ int main(int argc, char *argv[])
 	const float64 sampleFs = config["sample_fs"].as<float64>();
 	const float64 dist_freq = config["dist_freq"].as<float64>();
 	const float64 dist_gain = config["dist_gain"].as<float64>();
-	const float64 runTime = config["run_time"].as<float64>();	  // sec
-	const float64 warmUp = config["warm_up"].as<float64>();		  // sec
-	const float64 startWait = config["start_wait"].as<float64>(); // sec
-	const float64 analog_read_bias = config["analog_read_bias"].as<float64>();
-	const float64 analog_read_gain = config["analog_read_gain"].as<float64>();
+	const float64 runTime = config["run_time"].as<float64>(); // sec
+	const float64 warmUp = config["warm_up"].as<float64>();	  // sec
 	// const std::string log_path =  config["log_path"].as<std::string>();
+	const std::string log_folder = config["log_folder"].as<std::string>();
+	const std::string device_log_path = log_folder + '/' + config["device_log_path"].as<std::string>();
+
+
+	try
+	{
+		if (!fs::exists(log_folder))
+		{
+			if (fs::create_directory(log_folder))
+			{
+				printf("created log dir %s \n", log_folder.c_str());
+			}
+			else
+			{
+				printf("Failed to create log dir!\n");
+				return 1;
+			}
+		}
+	}
+	catch (std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+
+
 
 	printf("config file path: %s \n", config_path.c_str());
-	// printf("log file path: %s \n", log_path.c_str());
-
-	int32 error = 0;
-	char errBuff[2048] = {'\0'};
-	TaskHandle taskHandle_w = 0, taskHandle_r = 0;
-	char trigName[256] = {0};
+	printf("log file path: %s \n", device_log_path.c_str());
 
 	const int32 samplesPerChan = 1;
 
 	const int32 writeNumChan = 2;
 	float64 write_origin[samplesPerChan * writeNumChan + 100] = {0};
 	float64 *writeChan0 = &write_origin[0], *writeChan1 = &write_origin[samplesPerChan];
-
-	const int32 readNumChan = 1;
-	float64 read_origin[samplesPerChan * readNumChan] = {0};
-	float64 *readChan0 = &read_origin[0];
 
 	const int32 totalNumSamples = (runTime + warmUp) * sampleFs + sampleFs;
 
@@ -78,10 +94,9 @@ int main(int argc, char *argv[])
 
 	int64 index = 0;
 	float64 globalTime = 0;
-	float64 timeout = 10.0 / sampleFs;
 	void *ctrl_ptr = controllerInit(argc, argv);
 
-	std::ofstream stream(config["device_log_path"].as<std::string>(), std::ios::binary);
+	std::ofstream stream(device_log_path, std::ios::binary);
 	msgpack::packer<std::ofstream> packer(stream);
 	datapack_t data;
 	data.t.reserve(totalNumSamples);
@@ -89,8 +104,7 @@ int main(int argc, char *argv[])
 	data.u.reserve(totalNumSamples);
 	data.y.reserve(totalNumSamples);
 
-
-    boost::numeric::odeint::runge_kutta_dopri5<state_type> stepper;
+	boost::numeric::odeint::runge_kutta_dopri5<state_type> stepper;
 	state_type x(2);
 	x = {0.0, 0.0};
 
