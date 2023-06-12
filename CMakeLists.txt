@@ -30,7 +30,7 @@ if (${SYSTEM_TYPE} STREQUAL "Windows")
         set(CMAKE_C_COMPILER ${toolchainpath}/x86_64-w64-mingw32/usr/bin/x86_64-nilrt-linux/x86_64-nilrt-linux-gcc.exe)
         set(CMAKE_CXX_COMPILER ${toolchainpath}/x86_64-w64-mingw32/usr/bin/x86_64-nilrt-linux/x86_64-nilrt-linux-g++.exe)
 
-        set(CMAKE_CXX_STAN/DARD 17)
+        set(CMAKE_CXX_STANDARD 17)
         set(CMAKE_CXX_STANDARD_REQUIRED ON)
         # set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -44,8 +44,27 @@ if (${SYSTEM_TYPE} STREQUAL "Windows")
         set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
         set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
         set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
-        set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
+        set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)     
+
+    else()
+
+
+        message("BUILD_SIMULATION_ONLY")
+
+        set(CMAKE_CXX_STANDARD 17)
+        set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g3")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+
+        set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+        set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
+        set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
+        set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)     
+
     endif()
+    
 
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(FATAL_ERROR "Haven't integrate Linux compiler setup yet")
@@ -59,9 +78,16 @@ project(ActiveNoiseCancellation)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/run/bin/${PREFIX})
 set(CMAKE_BUILD_TYPE Release)
+# set(CMAKE_BUILD_TYPE Debug)
 set(HEADER_DIRS include lib/Eigen lib lib/boost src lib/yaml-cpp lib/msgpack/include libs/nidaqmx utils)
 set(LIB_DIRS lib libs/nidaqmx)
-set(LIB libnidaqmx.so m libyaml-cpp.a pthread)
+
+if (NOT DEFINED BUILD_SIMULATION_ONLY)
+    set(LIB libnidaqmx.so libyaml-cpp.a m pthread)
+else()
+    set(LIB m libyaml-cpp.a pthread)
+endif()
+
 
 if(DEFINED PREFIX)
     message("PREFIX: ${PREFIX}")

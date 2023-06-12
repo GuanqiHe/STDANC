@@ -28,7 +28,7 @@ public:
 	Eigen::Vector2d G, theta_hat;
 	boost::numeric::odeint::runge_kutta_dopri5<state_type> stepper;
 
-	SwitchingAFC(double w_star, double dt, double theta1, double theta2, double alpha_, double eps, double gamma_, double h_, double d1_ = 0.01, double d2_ = 5.0, double bound_ = 3.95) : w(8), w_star_(w_star), dt_(dt), h(h_), d1(d1_), d2(d2_), out(0), tw(0), bound(bound_), alpha(alpha_), epsilon(eps), gamma(gamma_), switching_signal_stack(10), reset_signal(0)
+	SwitchingAFC(double w_star, double dt, double theta1, double theta2, double alpha_, double eps, double gamma_, double h_, double d1_ = 0.01, double d2_ = 5.0, double bound_ = 3.95) : w(8), w_star_(w_star), dt_(dt), h(h_), d1(d1_), d2(d2_), out(0), tw(0), bound(bound_), alpha(alpha_), epsilon(eps), gamma(gamma_), reset_signal(0), switching_signal_stack(10)
 	{
 		theta_hat << theta1, theta2;
 

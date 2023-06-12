@@ -54,3 +54,4 @@ void controllerFinish(void *ctrl_ptr)
     SwitchingAFC *ptr = (SwitchingAFC *)(ctrl_ptr);
     delete ptr;
 }
+
