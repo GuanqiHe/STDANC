@@ -1,19 +1,47 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "x64 (gdb) Launch",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/build/bin/ConRW",
-        "args": [],
-        "stopAtEntry": false,
-        "cwd": ".",
-        "environment": [],
-        "showDisplayString": true,
-        "MIMode": "gdb",
-        "miDebuggerPath": "C:/build/23.0/x64/sysroots/x86_64-w64-mingw32/usr/bin/x86_64-nilrt-linux/x86_64-nilrt-linux-gdb.exe",
-        "miDebuggerServerAddress": "172.22.11.2:9092"
-      }
-    ]
-  }
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "utils/plot_log.py",
+      "args": [
+        "-f",
+        "run/data/mt_device_debug.bin",
+        "-xy",
+        "t,y"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "x64 (gdb) remote Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/run/bin/switchingAFCMulti/switchingAFCMulti_simulation",
+      "args": ["${workspaceFolder}/run/bin/switchingAFCMulti/switchingAFCMulti.yaml"],
+      "stopAtEntry": false,
+      "cwd": ".",
+      "environment": [],
+      "showDisplayString": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/build/23.0/x64/sysroots/x86_64-w64-mingw32/usr/bin/x86_64-nilrt-linux/x86_64-nilrt-linux-gdb.exe",
+      "miDebuggerServerAddress": "172.22.11.2:9092"
+    },
+    {
+      "name": "x64 (gdb) local Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/run/bin/switchingAFCMulti/switchingAFCMulti_simulation",
+      "args": ["${workspaceFolder}/run/bin/switchingAFCMulti/switchingAFCMulti.yaml"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/run",
+      "environment": [],
+      "showDisplayString": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb"
+    }
+  ]
+}
