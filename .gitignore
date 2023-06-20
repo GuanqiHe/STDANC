@@ -1,0 +1,13 @@
+.history/
+.vscode/
+build/
+lib/
+*.mat
+*.bin
+run/
+test/
+*.gif
+*.m4a
+files/
+CMakeFiles/
+data/

@@ -1,0 +1,12 @@
+[submodule "libs/Eigen"]
+	path = libs/Eigen
+	url = git@gitlab.com:libeigen/eigen.git
+[submodule "libs/msgpack"]
+	path = libs/msgpack
+	url = git@github.com:msgpack/msgpack-c.git
+[submodule "libs/yaml-cpp"]
+	path = libs/yaml-cpp
+	url = git@github.com:jbeder/yaml-cpp.git
+[submodule "libs/boost"]
+	path = libs/boost
+	url = git@github.com:boostorg/boost.git
