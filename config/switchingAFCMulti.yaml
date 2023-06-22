@@ -1,0 +1,32 @@
+sample_fs: 5000.0
+dist_freq: 50.0
+dist_gain: 0.5
+run_time: 60.0
+warm_up: 5.0
+start_wait: 2.0
+analog_read_bias: -1.913
+analog_read_gain: 8000
+log_folder: data/switchingAFCMulti
+device_log_path: device.bin
+algo_dist_freq:
+  - 50
+  - 100
+  - 150
+  - 200
+theta:
+  - -1.0
+  - -1.0
+  - -1.0
+  - -1.0
+  - -1.0
+  - -1.0
+  - -1.0
+  - -1.0
+# 50Hz correct
+# theta1: -1.0
+# theta2: -1.0
+alpha: 2.0
+epsilon: 2.0
+gamma: 5.0
+h: 0.5
+controller_log_path: algorithm.bin
